@@ -7,50 +7,50 @@ apitool
 #=====
 
 api_config.php
-======
-#可以配置不同服务器
+---------------------------------------
+###可以配置不同服务器
 `
 $config['api_host'] = array(
-	'default'=>array(
-		'title' =>'开发环境',
-		'host' => '127.0.0.1',
-		'url' => 'http://rest.tyqiu.com'
-	),
-	'pro'=>array(
-		'title' =>'正式环境',
-		'host' => 'xxx.xxx.xx.xxx',
-		'url' => 'http://xx.com'
-	)
+    'default'=>array(
+        'title' =>'开发环境',
+        'host' => '127.0.0.1',
+        'url' => 'http://rest.tyqiu.com'
+    ),
+    'pro'=>array(
+        'title' =>'正式环境',
+        'host' => 'xxx.xxx.xx.xxx',
+        'url' => 'http://xx.com'
+    )
 );
 `
 
-#可以模拟多种请求设备 ，如果有项目需要额外手机参数 可以自己添加扩展
+###可以模拟多种请求设备 ，如果有项目需要额外手机参数 可以自己添加扩展
 `
 $config['devices'] = array(
-	'default'=>array(
-		'title' =>'iphone 1',  
-		'uuid' => 'dcc01b481a7245325eacac170d4da0b5200b7d6b7',
-		'platform' => 'iphone'
-	),
-	'and1'=>array(
-		'title' =>'android 1',
-		'uuid' => '357070051856062',
-		'platform' => 'android'
-	)
+    'default'=>array(
+        'title' =>'iphone 1',  
+        'uuid' => 'dcc01b481a7245325eacac170d4da0b5200b7d6b7',
+        'platform' => 'iphone'
+    ),
+    'and1'=>array(
+        'title' =>'android 1',
+        'uuid' => '357070051856062',
+        'platform' => 'android'
+    )
 );
 `
 
-#接口地址
+###接口地址
 `
 $config['apis'] = array(
-		'system.setting.preload'=>array(
-			'title'=> '设备初始化',
-			'api' => 'system.setting.preload',
-			'method'=>'GET',               
-			'params' => array(
-				'param1' => 'default value',   //接口参数， 可以多个
-				'param2' => ''
-			)
-		),
+    'system.setting.preload'=>array(
+        'title'=> '设备初始化',
+        'api' => 'system.setting.preload',
+        'method'=>'GET',               
+        'params' => array(
+            'param1' => 'default value',   //接口参数， 可以多个
+            'param2' => ''
+        )
+    ),
 );
 `
