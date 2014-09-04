@@ -1,0 +1,64 @@
+*{ margin:0;padding: 0; list-style: none;}
+a{ text-decoration: none; color: #666}
+body{ padding-top: 65px}
+#ajaxloading{position:absolute; top:60px; left:0px; padding: 0 20px; background:#e90; color: #fff}
+
+#head{border-bottom: 1px solid #ddd; position: fixed; top:0; width: 100%; background: #fff;z-index: 10;} 
+#head .inner{padding:15px 20px; padding-right: 50px; line-height: 27px;}
+#head h3{ float: left;}
+#head .env{ float: left; margin-left: 100px}
+#head .nav li{ display: block; float: right; padding: 0px 15px}
+#head .nav li.on{ background:#00ADEE;}
+#head .nav li.on a{ color: #fff}
+
+#col{ width: 350px;position:absolute; top:65px;  z-index: 5;}
+#col ul{ padding: 10px 15px; }
+#col ul li.action{ padding-left: 110px}
+#col ul.client{ border-top: 1px solid #efefef; border-bottom: 1px solid #efefef;}
+#col ul li{  line-height: 31px; display: block; overflow: hidden;}
+#col ul li label{ display: block; float: left; width: 100px; text-align: right; padding-right: 10px}
+#col ul li input.txt{ width: 100px}
+#col ul li p.tip{ color:#999; padding-left: 110px; font-size: 12px;line-height: 21px;}
+
+ul#systemparams.hide li.p{ display: none}
+
+.login{ float: left; width: 150px;}
+.login input{ margin-bottom: 5px;  line-height: 27px; height: 27px}
+
+#cor{ padding-left: 370px; padding-top: 15px}
+#cor h5{ font-weight: normal; line-height: 27px}
+#cor .inner{ padding: 5px 0; margin-bottom: 20px; border: 1px solid #efefef; padding: 10px 20px}
+#action a{ margin-left: 125px; }
+a.btn {
+    border-radius: 0.5em;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    display: inline-block;
+    font: 12px/100% Arial,Helvetica,sans-serif;
+    margin: 0 2px;
+    outline: medium none;
+    padding: 5px 10px; 
+    text-align: center;
+    text-decoration: none;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    vertical-align: baseline;
+
+    background: -moz-linear-gradient(center top , #00ADEE, #0078A5) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border: 1px solid #0076A3;
+    color: #D9EEF7;
+}
+
+a.btn:hover {
+    background: -moz-linear-gradient(center top , #0095CC, #00678E) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    text-decoration: none;
+}
+a.btn:active {
+    background: -moz-linear-gradient(center top , #0078A5, #00ADEE) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    color: #80BED6;
+    position: relative;
+    top: 1px;
+}
+
+a.tri{ border: 1px solid #666; padding: 2px 5px; display:inline-block; margin:5px 2px}
+
+#device_uuid{ font-size: 9px; padding-left: 110px}

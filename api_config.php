@@ -7,12 +7,12 @@ $config['api_host'] = array(
 	'default'=>array(
 		'title' =>'开发环境',
 		'host' => '127.0.0.1',
-		'url' => 'http://rest.tyqiu.com'
+		'url' => 'http://127.0.0.1/rest'
 	),
 	'pro'=>array(
 		'title' =>'正式环境',
-		'host' => 'xxx.xxx.xx.xxx',
-		'url' => 'http://xx.com'
+		'host' => 'yourdomain.com',
+		'url' => 'http://yourdomain.com/rest'
 	)
 );
 
@@ -29,14 +29,28 @@ $config['devices'] = array(
 	)
 );
 
+//系统参数
+$config['system_params'] = array(
+	'v' => '1.0',
+    '_timestamp' => time(),
+    //more params
+);
+
 $config['apis'] = array(
-		'system.setting.preload'=>array(
-			'title'=> '设备初始化',
-			'api' => 'system.setting.preload',
+		'testapi'=>array(
+			'title'=> '测试接口',
+			'api' => 'testapi',
 			'method'=>'GET',
 			'params' => array(
-				'param1' => 'default value',
-				'param2' => ''
+				'param1' => array(
+					'type' => 'text',
+					'placeholder' => '请输入',
+					'tip' =>'参数说明'
+				),
+				'param2' => array(
+					'type' => 'text',
+					'defvalue' => '默认值'
+				)
 			)
 		),
 );

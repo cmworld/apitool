@@ -2,12 +2,6 @@
 
 class httpClient{
     
-	public $client_key;
-    
-	public $client_secret;    
-    
-    public $header = array();
-    
 	public $http_code;
     
     public $host;
@@ -21,49 +15,9 @@ class httpClient{
 	public $useragent = 'apex sdk';
     
     public static $boundary = '';
-
-    function __construct($client_key,$client_secret,$header){
-        $this->client_key = $client_key;
-        $this->client_secret = $client_secret;
-        $this->header = $header;
-    }
     
-    function signature($data){
-		if(isset($data['filename'])) unset($data['filename']);
-        if(isset($data['sign'])) unset($data['sign']);
-		
-        ksort($data); //uksort($request, 'strcmp');   
+	function oAuthRequest( $parameters,$method='GET',$headers=array(), $multi = false) {
         
-        $sign_str = ""; 
-        foreach($data as $k=>$v){
-            //$v = $this->safe_encode($v);
-            $sign_str .="$k$v";
-        }
-        $sign_str .= $this->client_secret;
-
-        return md5($sign_str);
-    }
-    
-    private function safe_encode($data) {
-      if (is_array($data)) {
-        return array_map(array($this, 'safe_encode'), $data);
-      } else if (is_scalar($data)) {
-        return str_ireplace(
-          array('+', '%7E'),
-          array(' ', '~'),
-          rawurlencode($data)
-        );
-      } else {
-        return '';
-      }
-    }    
-    
-	function oAuthRequest( $parameters,$method='GET', $multi = false) {
-        
-        $headers = $this->header;
-        
-        $parameters['sign'] = $this->signature($parameters);
-         
         switch ($method) {
             case 'GET':
                 $url = $this->host . '?' . http_build_query($parameters,'','&');
@@ -119,7 +73,7 @@ class httpClient{
 		
 		$this->url = $url;
 
-
+		
 		$info  = curl_getinfo($ci);
 		$this->http_code = $info['http_code'];
 		$this->http_info = array(
@@ -130,7 +84,7 @@ class httpClient{
 		if($method == 'POST'){
 			$this->http_info = array_merge($this->http_info, array('post_body'=>$this->postdata));
 		}
-
+		
 		curl_close ($ci);
 		return $response;
 	}
