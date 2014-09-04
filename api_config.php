@@ -29,6 +29,18 @@ $config['devices'] = array(
 	)
 );
 
+//调用api的参数名
+$config['api_name'] = 'r';
+
+//签名算法
+$config['use_sign'] = true;
+
+//签名参数
+$config['sign_name'] = 'sign';
+
+//签名私钥
+$config['sign_key'] = '3542e676b4c80983f6131cdfe577ac9b';
+
 //系统参数
 $config['system_params'] = array(
 	'v' => '1.0',

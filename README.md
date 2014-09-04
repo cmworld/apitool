@@ -9,24 +9,24 @@ apitool
 ---------------------------------------
 api_config.php
 ---------------------------------------
-###可以配置不同服务器
-`
+-可以配置不同服务器环境
+```
 $config['api_host'] = array(
     'default'=>array(
         'title' =>'开发环境',
         'host' => '127.0.0.1',
-        'url' => 'http://rest.tyqiu.com'
+        'url' => 'http://127.0.0.1/rest'
     ),
     'pro'=>array(
         'title' =>'正式环境',
-        'host' => 'xxx.xxx.xx.xxx',
-        'url' => 'http://xx.com'
+        'host' => 'xx.com/rest',
+        'url' => 'http://xx.com/rest'
     )
 );
-`
+```
 
-###可以模拟多种请求设备 ，如果有项目需要额外手机参数 可以自己添加扩展
-`
+-可以模拟多种请求设备 ，如果有项目需要额外手机参数 可以自己添加扩展
+```
 $config['devices'] = array(
     'default'=>array(
         'title' =>'iphone 1',  
@@ -39,19 +39,33 @@ $config['devices'] = array(
         'platform' => 'android'
     )
 );
-`
+```
+-签名设置
+-系统参数
+$config['system_params'] = array(
+    'v' => '1.0',
+    '_timestamp' => time(),
+    //more params
+);
 
-###接口地址
-`
+-接口地址
+```
 $config['apis'] = array(
-    'system.setting.preload'=>array(
-        'title'=> '设备初始化',
-        'api' => 'system.setting.preload',
-        'method'=>'GET',               
+    'test_api'=>array(
+        'title'=> '例子接口',
+        'api' => 'testapi',
+        'method'=>'GET',     //post              
         'params' => array(
-            'param1' => 'default value',   //接口参数， 可以多个
-            'param2' => ''
+            'param1' => array(
+                'type' => 'text',
+                'placeholder' => '请输入',
+                'tip' =>'参数说明'
+            ),
+            'param2' => array(
+                'type' => 'text',
+                'defvalue' => '默认值'
+            )
         )
     ),
 );
-`
+```
