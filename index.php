@@ -95,13 +95,16 @@ if($c == 'device'){
 	
 	<ul>		
 		<li>
-			<label>api</label>
+			<label>接口名称</label>
 			<select id="api" onchange="javascript:selectApi(this.value);">
 				<option value="0" selected>选择API</option>
 				<?php foreach($config['apis'] as $k=>$a):?>
 				<option value="<?=$k?>" method="<?=$a['method']?>"><?=$a['title']?></option>
 				<?php endforeach;?>
 			</select>
+		</li>
+		<li>
+			<label>api</label> <span id="apiname">--</span>
 		</li>
 		<li>
 			<label>提交方式</label><input type="radio" id="rd_post" name="method" value="post" disabled /> POST　<input type="radio" id="rd_get" name="method" value="get" disabled /> GET

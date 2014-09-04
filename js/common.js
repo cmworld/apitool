@@ -87,6 +87,9 @@ function selectApi(api){
 	$.getJSON('index.php',{'c':'api','a':api},function(result){
 		var ul = $("<ul></ul>");
 		$("#col").append(ul);
+
+		$("#apiname").html(result.api);
+
 	    $.each(result.params, function(k, v){
 			var li = $("<li><label>"+ k + "</label></li>");
 
