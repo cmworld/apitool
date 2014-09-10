@@ -35,7 +35,7 @@ class apicall{
         return md5($sign_str);
     }
 
-    function call($api,$args=array(),$returnherader = false){
+    function call($api,$args=array()){
 
         $ar = $this->getApi($api);
         $args[$this->conf['api_name']] = $ar['api'];
@@ -53,16 +53,33 @@ class apicall{
         $_http->host = $this->apiurl;
         $result = $_http->oAuthRequest($args,$ar['method'],$header);
 
-        $response = json_decode($result,true);
-        if($returnherader){
-            $res = array(
-                'header' => $_http->http_info,
-                'response' => $response ? $response : $result
-            );
-
-            return json_encode($res);
+        if($_http->http_info['content_type'] == 'application/json'){
+            $json_decode_data =json_decode($result,true);
+            if(json_last_error() == JSON_ERROR_NONE){
+                $data_type = 'json';
+                $result = $json_decode_data;
+            }else{
+                $data_type = 'txt';
+            }
+        }else if($_http->http_info['content_type'] == 'text/xml'){
+             $data_type = 'xml';
+        }else{
+            $data_type = 'txt';
         }
 
-        return $result; 
+        $res = array(
+            'header' => array(
+                'url' => $_http->http_info['url'],
+                'request' => $_http->http_info['request_header']
+            ),
+            'data_type' => $data_type,
+            'response' => $result
+        );
+
+        if($ar['method'] == 'POST'){
+            $res['header']['post_body'] = $_http->postdata;
+        }
+
+        return $res;
     }
 }

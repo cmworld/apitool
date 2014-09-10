@@ -27,25 +27,76 @@ if($c == 'device'){
 	echo json_encode($apiinfo);
 	exit;
 }elseif ($c == 'do'){
-	header("Content-type:text/html;charset=utf-8");
-	
+
 	$a = isset($_REQUEST['a']) ? $_REQUEST['a'] : '';
-	$returnheader = isset($_REQUEST['returnheader']) ? 1 : 0;
 
 	unset($_REQUEST['a']);
 	unset($_REQUEST['c']);
 	unset($_REQUEST['api']);
-	unset($_REQUEST['returnheader']);
 	unset($_REQUEST['env']);
 	unset($_REQUEST['device']);	
 	$args = $_REQUEST;
+
+	if(isset($args['_apitool_filename']) && isset($_FILES["fileToUpload"])){
+		if($_FILES["fileToUpload"]['error'] > 0){
+			switch($_FILES["fileToUpload"]['error']){
+				case '1':
+					$error = 'The uploaded file exceeds the upload_max_filesize directive in php.ini';
+					break;
+				case '2':
+					$error = 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form';
+					break;
+				case '3':
+					$error = 'The uploaded file was only partially uploaded';
+					break;
+				case '4':
+					$error = 'No file was uploaded.';
+					break;
+
+				case '6':
+					$error = 'Missing a temporary folder';
+					break;
+				case '7':
+					$error = 'Failed to write file to disk';
+					break;
+				case '8':
+					$error = 'File upload stopped by extension';
+					break;
+				case '999':
+				default:
+					$error = 'No error code avaiable';
+			}
+
+			header('HTTP/1.1 500 Internal Server Error'); 
+			exit("ApiTool Report : ".$error);
+		}
+
+		if (!@is_uploaded_file($_FILES["fileToUpload"]["tmp_name"])) {
+			header('HTTP/1.1 500 Internal Server Error'); 
+			exit("ApiTool Report : Upload Failed.");
+	    }
+
+	    $target = dirname(__FILE__)."/tmp/".basename($_FILES['fileToUpload']['name']);
+		if(@move_uploaded_file($_FILES['fileToUpload']['tmp_name'],$target)){
+			$args[$args['_apitool_filename']] = '@'.$target;
+			unset($args['_apitool_filename']);
+		}else{
+			header('HTTP/1.1 500 Internal Server Error'); 
+			exit("ApiTool Report : Failed to move uploaded file to ".$target);
+		}
+	}
 
 	$args = array_merge(
 		$args,
 		array('uuid'  => $device_conf['uuid'],'platform' => $device_conf['platform'])
 	);
 
-	echo $api->call($a,$args,$returnheader);
+	header("Content-type: application/json");
+	header("Cache-Control: no-store, no-cache, must-revalidate");
+	header("Pragma: no-cache");
+
+	$res = $api->call($a,$args);
+	echo json_encode($res);
 	exit();
 }
 ?>
@@ -55,9 +106,10 @@ if($c == 'device'){
 <title>api 测试</title>
 <meta content="text/html;charset=utf-8" http-equiv="content-type">
 <link rel="stylesheet" type="text/css" href="./style.css">
-<script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="js/jquery-1.9.1.js"></script>
 <script type="text/javascript" src="js/jsonform.js"></script>
 <script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/ajaxfileupload.js"></script>
 </head>
 <body>
 <div id="ajaxloading" style="display:none"></div>
@@ -96,8 +148,8 @@ if($c == 'device'){
 	<ul>		
 		<li>
 			<label>接口名称</label>
-			<select id="api" onchange="javascript:selectApi(this.value);">
-				<option value="0" selected>选择API</option>
+			<select id="api">
+				<option value="0" selected="selected">选择API</option>
 				<?php foreach($config['apis'] as $k=>$a):?>
 				<option value="<?=$k?>" method="<?=$a['method']?>"><?=$a['title']?></option>
 				<?php endforeach;?>

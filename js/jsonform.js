@@ -42,7 +42,7 @@ var JSONFormat = (function(){
         if(0 <= object.search(/^http/)){
             object = '<a href="' + object + '" target="_blank" class="json_link">' + object + '</a>'
         }
-        return '<span class="json_string">"' + object + '"</span>';
+        return '<span class="json_string">"' + decodeURIComponent(object) + '"</span>';
     }
 
     function _format_array(object, indent_count){

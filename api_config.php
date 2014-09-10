@@ -1,7 +1,4 @@
 <?php
-//接口签名算法需要的  可以去掉 
-define( "APP_ID" , '1000' );
-define( "APP_KEY" , '3542e676b4c80983f6131cdfe577ac9b' );
 
 $config['api_host'] = array(
 	'default'=>array(
@@ -48,6 +45,19 @@ $config['system_params'] = array(
     //more params
 );
 
+/*
+	'params' => array(
+		'参数名' => array(
+					'type' => 输入文本框input类型,
+					'defvalue' => '默认值',
+					'placeholder' => 文本框提示
+					'required' => true //是否必须
+					'tip' => 字段说明
+				)
+		....
+	)
+*/
+
 $config['apis'] = array(
 		'testapi'=>array(
 			'title'=> '测试接口',
@@ -62,6 +72,21 @@ $config['apis'] = array(
 				'param2' => array(
 					'type' => 'text',
 					'defvalue' => '默认值'
+				)
+			)
+		),
+		'testapi2'=>array(
+			'title'=> '测试接口2',
+			'api' => 'testapi2',
+			'method'=>'POST',
+			'params' => array(
+				'param1' => array(
+					'type' => 'text',
+					'placeholder' => '请输入',
+					'tip' =>'参数说明'
+				),
+				'param2' => array(
+					'type' => 'file'
 				)
 			)
 		),

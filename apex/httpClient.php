@@ -2,7 +2,9 @@
 
 class httpClient{
     
-	public $http_code;
+	public $http_info;
+
+	public $postdata = null;
     
     public $host;
 
@@ -44,11 +46,12 @@ class httpClient{
 		curl_setopt($ci, CURLOPT_CONNECTTIMEOUT, $this->connecttimeout);
 		curl_setopt($ci, CURLOPT_TIMEOUT, $this->timeout);
 		curl_setopt($ci, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($ci, CURLOPT_BINARYTRANSFER, TRUE);
+
 		curl_setopt($ci, CURLOPT_ENCODING, "gzip");
 		//curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, $this->ssl_verifypeer);
 		//curl_setopt($ci, CURLOPT_SSL_VERIFYHOST, 1);
 		curl_setopt($ci, CURLOPT_HEADERFUNCTION, array($this, 'getHeader'));
-		curl_setopt($ci, CURLOPT_HEADER, FALSE);
 
 		switch ($method) {
 			case 'POST':
@@ -68,22 +71,17 @@ class httpClient{
 		curl_setopt($ci, CURLOPT_URL, $url );
 		curl_setopt($ci, CURLOPT_HTTPHEADER, $headers );
 		curl_setopt($ci, CURLINFO_HEADER_OUT, TRUE );
+		curl_setopt($ci, CURLOPT_HEADER, false);
 
 		$response = curl_exec($ci);
-		
+
+		//$headerSize = curl_getinfo($ci, CURLINFO_HEADER_SIZE);
+		//$response_header = substr($response, 0, $headerSize);
+		//echo $response_header;
+
 		$this->url = $url;
-
-		
 		$info  = curl_getinfo($ci);
-		$this->http_code = $info['http_code'];
-		$this->http_info = array(
-			'url' => $info['url'],
-			'request_header' => isset($info['request_header']) ? $info['request_header'] : ''
-		);
-
-		if($method == 'POST'){
-			$this->http_info = array_merge($this->http_info, array('post_body'=>$this->postdata));
-		}
+		$this->http_info = $info;
 		
 		curl_close ($ci);
 		return $response;
