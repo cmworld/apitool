@@ -14,7 +14,7 @@ class httpClient{
 
 	public $ssl_verifypeer = FALSE;
 	
-	public $useragent = 'apex sdk';
+	public $useragent = 'ApiTool';
     
     public static $boundary = '';
     
@@ -24,7 +24,7 @@ class httpClient{
         	case 'DELETE':
             case 'GET':
                 $url = $this->host . '?' . http_build_query($parameters,'','&');
-                return $this->http($url,$method,null,$headers);
+                return $this->http($url,$method,null,$headers,false);
             default:
             	/*
                 if (!$multi && (is_array($parameters) || is_object($parameters)) ) {
@@ -34,7 +34,7 @@ class httpClient{
                 }*/
             
                 return $this->http($this->host, $method, $parameters, $headers,$multi);
-        }   
+        }
 	}
 
 	function http($url, $method, $postfields = NULL, $headers = array(),$multi) {
