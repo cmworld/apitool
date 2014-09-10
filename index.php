@@ -37,6 +37,7 @@ if($c == 'device'){
 	unset($_REQUEST['device']);	
 	$args = $_REQUEST;
 
+	$multi = false;
 	if(isset($args['_apitool_filename']) && isset($_FILES["fileToUpload"])){
 		if($_FILES["fileToUpload"]['error'] > 0){
 			switch($_FILES["fileToUpload"]['error']){
@@ -84,6 +85,8 @@ if($c == 'device'){
 			header('HTTP/1.1 500 Internal Server Error'); 
 			exit("ApiTool Report : Failed to move uploaded file to ".$target);
 		}
+
+		$multi = true;
 	}
 
 	$args = array_merge(
@@ -95,7 +98,7 @@ if($c == 'device'){
 	header("Cache-Control: no-store, no-cache, must-revalidate");
 	header("Pragma: no-cache");
 
-	$res = $api->call($a,$args);
+	$res = $api->call($a,$args,$multi);
 	echo json_encode($res);
 	exit();
 }

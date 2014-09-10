@@ -21,22 +21,23 @@ class httpClient{
 	function oAuthRequest( $parameters,$method='GET',$headers=array(), $multi = false) {
         
         switch ($method) {
+        	case 'DELETE':
             case 'GET':
                 $url = $this->host . '?' . http_build_query($parameters,'','&');
-                return $this->http($url, 'GET',null,$headers);
+                return $this->http($url,$method,null,$headers);
             default:
+            	/*
                 if (!$multi && (is_array($parameters) || is_object($parameters)) ) {
                     $body = http_build_query($parameters,'','&');
                 } else {
                     $body = self::build_http_query_multi($parameters);
-                    $headers[] = "Content-Type: multipart/form-data; boundary=" . self::$boundary;
-                }
+                }*/
             
-                return $this->http($this->host, $method, $body, $headers);
+                return $this->http($this->host, $method, $parameters, $headers,$multi);
         }   
 	}
 
-	function http($url, $method, $postfields = NULL, $headers = array()) {
+	function http($url, $method, $postfields = NULL, $headers = array(),$multi) {
 		$this->http_info = array();
 
 		$ci = curl_init();
@@ -59,6 +60,15 @@ class httpClient{
 				if (!empty($postfields)) {
 					curl_setopt($ci, CURLOPT_POSTFIELDS, $postfields);
 					$this->postdata = $postfields;
+
+					if($multi){
+						foreach ($postfields as $parameter => $value) {
+							if(!empty($value) && $value{0} == '@' ) {
+								$file = ltrim( $value, '@');
+								curl_setopt($ci, CURLOPT_INFILESIZE,filesize($file));
+							}
+						}
+					}
 				}
 				break;
 			case 'DELETE':
@@ -113,7 +123,7 @@ class httpClient{
 
 		foreach ($params as $parameter => $value) {
 
-			if( $value{0} == '@' ) {
+			if(!empty($value) && $value{0} == '@' ) {
 				$url = ltrim( $value, '@' );
 				$content = file_get_contents( $url );
 				$array = explode( '?', basename( $url ) );

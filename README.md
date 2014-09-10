@@ -14,6 +14,12 @@ apitool
 
 api_config.php
 ---------------------------------------
+- 安装注意
+``` 
+临时文件目录设置可写
+chmod 777 apitool/tmp
+```
+
 - 可以配置不同服务器环境
 ```
 $config['api_host'] = array(

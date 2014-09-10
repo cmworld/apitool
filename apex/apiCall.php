@@ -35,7 +35,7 @@ class apicall{
         return md5($sign_str);
     }
 
-    function call($api,$args=array()){
+    function call($api,$args=array(),$multi = false,$header = array()){
 
         $ar = $this->getApi($api);
         $args[$this->conf['api_name']] = $ar['api'];
@@ -44,14 +44,23 @@ class apicall{
             $args[$this->conf['sign_name']] = $this->signature($args,$this->conf['sign_key']);
         }
 
-        $header = array(
-            'Host: '.$this->apihost,
-            "content-type: application/x-www-form-urlencoded;charset=".$this->charset
-        );
-
         $_http = new httpClient();  
         $_http->host = $this->apiurl;
-        $result = $_http->oAuthRequest($args,$ar['method'],$header);
+
+        $header [] = 'Host: '.$this->apihost;
+        $header [] = 'Connection: keep-alive';
+        $header [] = 'Accept:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';  
+        $header [] = 'Accept-Language: zh-CN,zh;q=0.8';  
+        $header [] = 'Accept-Charset: '.$this->charset.',*;q=0.7,*;q=0.3';  
+        $header [] = 'Cache-Control:max-age=0';
+
+        if($multi){
+            $header[] = "Content-Type: multipart/form-data;";
+        }else{
+            $header[] = "Content-Type: application/x-www-form-urlencoded";
+        }
+
+        $result = $_http->oAuthRequest($args,$ar['method'],$header,$multi);
 
         if($_http->http_info['content_type'] == 'application/json'){
             $json_decode_data =json_decode($result,true);
@@ -70,7 +79,7 @@ class apicall{
         $res = array(
             'header' => array(
                 'url' => $_http->http_info['url'],
-                'request' => $_http->http_info['request_header']
+                'request_header' => $_http->http_info['request_header']
             ),
             'data_type' => $data_type,
             'response' => $result
