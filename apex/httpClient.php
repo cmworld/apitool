@@ -64,14 +64,12 @@ class httpClient{
 							if(!empty($value) && $value{0} == '@' ) {
 								$file = ltrim( $value, '@');
 								curl_setopt($ci, CURLOPT_INFILESIZE,filesize($file));
-
-								unset($postfields[$parameter]);
 							}
 						}
+						curl_setopt($ci, CURLOPT_POSTFIELDS, $postfields);
+					}else{
+						curl_setopt($ci, CURLOPT_POSTFIELDS, http_build_query($postfields,'','&'));
 					}
-
-					curl_setopt($ci, CURLOPT_POSTFIELDS, http_build_query($postfields,'','&'));
-					$this->postdata = $postfields;
 
 				}
 				break;
