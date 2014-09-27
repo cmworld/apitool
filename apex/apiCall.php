@@ -55,9 +55,9 @@ class apicall{
         $header [] = 'Cache-Control:max-age=0';
 
         if($multi){
-           // $header[] = "Content-Type: multipart/form-data";
+            $header[] = "Content-Type: multipart/form-data";
         }else{
-           // $header[] = "Content-Type: application/x-www-form-urlencoded";
+            $header[] = "Content-Type: application/x-www-form-urlencoded";
         }
 
         $result = $_http->oAuthRequest($args,$ar['method'],$header,$multi);

@@ -58,17 +58,21 @@ class httpClient{
 			case 'POST':
 				curl_setopt($ci, CURLOPT_POST, TRUE);
 				if (!empty($postfields)) {
-					curl_setopt($ci, CURLOPT_POSTFIELDS, $postfields);
-					$this->postdata = $postfields;
 
 					if($multi){
 						foreach ($postfields as $parameter => $value) {
 							if(!empty($value) && $value{0} == '@' ) {
 								$file = ltrim( $value, '@');
 								curl_setopt($ci, CURLOPT_INFILESIZE,filesize($file));
+
+								unset($postfields[$parameter]);
 							}
 						}
 					}
+
+					curl_setopt($ci, CURLOPT_POSTFIELDS, http_build_query($postfields,'','&'));
+					$this->postdata = $postfields;
+
 				}
 				break;
 			case 'DELETE':
@@ -106,42 +110,4 @@ class httpClient{
 		return strlen($header);
 	}
 
-	/**
-	 * @ignore
-	 */
-	public static function build_http_query_multi($params) {
-		if (!$params) return '';
-
-		uksort($params, 'strcmp');
-
-		$pairs = array();
-
-		self::$boundary = $boundary = uniqid('------------------');
-		$MPboundary = '--'.$boundary;
-		$endMPboundary = $MPboundary. '--';
-		$multipartbody = '';
-
-		foreach ($params as $parameter => $value) {
-
-			if(!empty($value) && $value{0} == '@' ) {
-				$url = ltrim( $value, '@' );
-				$content = file_get_contents( $url );
-				$array = explode( '?', basename( $url ) );
-				$filename = $array[0];
-
-				$multipartbody .= $MPboundary . "\r\n";
-				$multipartbody .= 'Content-Disposition: form-data; name="' . $parameter . '"; filename="' . $filename . '"'. "\r\n";
-				$multipartbody .= "Content-Type: image/unknown\r\n\r\n";
-				$multipartbody .= $content. "\r\n";
-			} else {
-				$multipartbody .= $MPboundary . "\r\n";
-				$multipartbody .= 'content-disposition: form-data; name="' . $parameter . "\"\r\n\r\n";
-				$multipartbody .= $value."\r\n";
-			}
-
-		}
-
-		$multipartbody .= $endMPboundary;
-		return $multipartbody;
-	}
 }
